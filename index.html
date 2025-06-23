@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIRA ONLINE SHOP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* === BAGIAN CSS DIMULAI === */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        :root {
+            --primary-color: #6a11cb;
+            --secondary-color: #2575fc;
+            --text-color: #333;
+            --card-bg: rgba(255, 255, 255, 0.95); /* Sedikit transparan agar lebih menyatu */
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --border-radius: 15px;
+        }
+
+        /* --- BACKGROUND ANIMASI YANG MENARIK --- */
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px; /* Tambah padding atas bawah */
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            height: 100vh;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        /* --- AKHIR DARI BACKGROUND ANIMASI --- */
+
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 25px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px); /* Efek glassmorphism */
+            -webkit-backdrop-filter: blur(10px); /* Untuk Safari */
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .store-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #4b0082, #00008b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cart-icon-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-icon-container .fa-shopping-cart {
+            font-size: 2rem;
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+        
+        .cart-icon-container:hover .fa-shopping-cart{
+            transform: scale(1.2);
+        }
+
+        #cart-total {
+            position: absolute;
+            top: -10px;
+            right: -15px;
+            background-color: #e73c7e;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 2px solid white;
+        }
+
+        #product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .product-card h3 {
+            margin-top: 0;
+            font-size: 1.4rem;
+            color: var(--text-color);
+        }
+
+        .product-card .price {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .add-to-cart-btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .add-to-cart-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(37, 117, 252, 0.5);
+        }
+
+        .add-to-cart-btn.added::after {
+            content: '\f00c'; /* Check icon */
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            color: white;
+            font-size: 1.5rem;
+            animation: popIn 0.5s forwards;
+        }
+
+        @keyframes popIn {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+
+        h2 {
+            font-size: 1.8rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        h2 i {
+            margin-right: 10px;
+        }
+
+        .cart-section, .confirmation-section {
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: var(--border-radius);
+        }
+
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .payment-option span:first-child {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .payment-option span i {
+            color: var(--primary-color);
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        .copy-target {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .copy-btn {
+            background: #e0e0e0;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .copy-btn:hover {
+            background: #ccc;
+        }
+        .copy-btn.copied {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .qris-option {
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        #qris-image {
+            width: 150px;
+            height: 150px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+        #qris-image:hover {
+            transform: scale(1.05);
+        }
+
+        .upload-feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.8);
+        }
+        #proof-upload {
+            display: none;
+        }
+        .upload-feature label {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .upload-feature label:hover {
+            background: var(--secondary-color);
+        }
+        #file-name {
+            margin-top: 10px;
+            font-style: italic;
+            color: #666;
+        }
+
+        .social-confirmation {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .whatsapp-btn, .telegram-btn {
+            text-decoration: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+        }
+        .whatsapp-btn {
+            background: #25D366;
+        }
+        .telegram-btn {
+            background: #0088cc;
+        }
+        .whatsapp-btn:hover, .telegram-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1001;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9);
+        }
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 400px;
+            animation-name: zoom;
+            animation-duration: 0.6s;
+        }
+        @keyframes zoom {
+            from {transform:scale(0)}
+            to {transform:scale(1)}
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .close-modal:hover,
+        .close-modal:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        #caption {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+            text-align: center;
+            color: #ccc;
+            padding: 10px 0;
+            height: 150px;
+        }
+        
+        /* Animasi Keranjang */
+        .cart-icon-container.shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+          10%, 90% {
+            transform: translate3d(-1px, 0, 0);
+          }
+          20%, 80% {
+            transform: translate3d(2px, 0, 0);
+          }
+          30%, 50%, 70% {
+            transform: translate3d(-4px, 0, 0);
+          }
+          40%, 60% {
+            transform: translate3d(4px, 0, 0);
+          }
+        }
+        /* === BAGIAN CSS BERAKHIR === */
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1 class="store-name">DIRA ONLINE SHOP</h1>
+            <div class="cart-icon-container">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cart-total">0</span>
+            </div>
+        </header>
+
+        <main id="product-list">
+            </main>
+
+        <div class="cart-section">
+            <h2><i class="fas fa-cash-register"></i> Pembayaran</h2>
+            <div class="payment-methods">
+                <div class="payment-option">
+                    <span><i class="fas fa-wallet"></i> DANA</span>
+                    <span id="dana-number" class="copy-target">085822309902</span>
+                    <button class="copy-btn" data-target="dana-number"><i class="far fa-copy"></i> Salin</button>
+                </div>
+                <div class="payment-option">
+                    <span><i class="fas fa-egg"></i> OVO</span>
+                    <span id="ovo-number" class="copy-target">085822309902</span>
+                    <button class="copy-btn" data-target="ovo-number"><i class="far fa-copy"></i> Salin</button>
+                </div>
+                <div class="payment-option">
+                    <span><i class="fas fa-hand-holding-usd"></i> Gopay</span>
+                    <span id="gopay-number" class="copy-target">085822309902</span>
+                    <button class="copy-btn" data-target="gopay-number"><i class="far fa-copy"></i> Salin</button>
+                </div>
+                <div class="payment-option qris-option">
+                    <span><i class="fas fa-qrcode"></i> QRIS</span>
+                    <img src="https://files.catbox.moe/c66pz1.png/v1/create-qr-code/?size=150x150&data=ContohDataQRIS" alt="QRIS Code" id="qris-image">
+                    <p>(Klik gambar untuk memperbesar)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="confirmation-section">
+            <h2><i class="fas fa-check-circle"></i> Konfirmasi Pesanan</h2>
+            <div class="upload-feature">
+                <label for="proof-upload"><i class="fas fa-upload"></i> Upload Bukti Transfer</label>
+                <input type="file" id="proof-upload" accept="image/*">
+                <span id="file-name">Belum ada file dipilih</span>
+            </div>
+            <div class="social-confirmation">
+                <a href="https://wa.me/6285822309902?text=Halo,%20saya%20ingin%20konfirmasi%20pesanan%20saya
+                %20seperti%20berikut
+                %20pesananmu....
+                %20pesananmu...
+                %pesananmu...." target="_blank" class="whatsapp-btn"><i class="fab fa-whatsapp"></i> Konfirmasi via WhatsApp</a>
+                </div>
+                <div class="social-confirmation">
+                <a href="https://t.me/Dira1501?text=Halo,%20saya%saya%ingin%20konfirmasi%20pesanan%20saya
+                %20seperti%20berikut
+                %20pesananmu...
+                %20pesananmu...
+                %20pesananmu...." target="_blank" class="telegram-btn"><i class="fab fa-telegram-plane"></i> Konfirmasi via Telegram</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="qris-modal" class="modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="img-modal">
+        <div id="caption">QRIS</div>
+    </div>
+
+    <script>
+    // === BAGIAN JAVASCRIPT DIMULAI ===
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- DATA PRODUK (Bisa ditambahkan di sini) ---
+        const products = [
+            { id: 1, name: "APK NONTON BIOSKOP", price: "Rp 2.000" },
+            { id: 2, name: "APK NONTON TV", price: "Rp 2.000" },
+            { id: 3, name: "APK AUTO SV CONTACT", price: "Rp 3.000" },
+            { id: 4, name: "APK BUAT HD FOTO/VIDEO", price: "Rp 1.000" },
+            { id: 5, name: "FITUR ROG", price: "Rp 3.000" },
+            { id: 6, name: "HOLO FF SS 00 AMAN", price: "Rp 5.000" },
+            { id: 7, name: "PANEL BUAT RUN SC LIST KE PM", price: "Rp 0" },
+            { id: 8, name: "SUNTIK ALL SOSMED LIST KE PM", price: "Rp 0" },
+            { id: 9, name: "JASA BUG WA PERNOMOR LIST KE PM", price: "Rp 0" },
+            { id: 10, name: "MURID BUAT WEBSITE PERMANEN", price: "Rp 10.000" },
+            { id: 11, name: "OWNER BUAT WEBSITE PERMANEN", price: "Rp 20.000" },
+            { id: 12, name: "MURID SUNTIK SOSMED PERMANEN", price: "Rp 10.000" },
+            { id: 13, name: "MURID BUG WA PERMAMEN", price: "Rp 15.000" },
+            { id: 14, name: "OWNER BUG WA PERMANEN", price: "Rp 25.000" },
+            { id: 15, name: "JASA PEMBUATAN WEBSITE TOP UP GAME KONFIRMASI VIA WA/TELEGRAM", price: "Rp 25K.000" },
+            { id: 16, name: "JASA PEMBUATAN WEBSITE TOKO ONLINE KONFIRMASI VIA WA/TELEGRAM", price: "Rp 20.000" },
+            { id: 17, name: "JASA PEMBUATAN WEBSITE KHUSUS PAYMENT", price: "Rp 20.000" },
+            { id: 18, name: "SOURCE CODE TOP UP GAME", price: "Rp 20.000" },
+            { id: 19, name: "SOURCE CODE TOKO ONLINE", price: "Rp 15.000" },
+            { id: 20, name: "SOURCE CODE KHUSUS PAYMENT", price: "Rp 15.000" },
+        ];
+
+        const productList = document.getElementById('product-list');
+        const cartTotalElement = document.getElementById('cart-total');
+        let cartItemCount = 0;
+
+        // --- Menampilkan Produk ke Halaman ---
+        function displayProducts() {
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <h3>${product.name}</h3>
+                    <p class="price">${product.price}</p>
+                    <button class="add-to-cart-btn" data-id="${product.id}">
+                        <i class="fas fa-cart-plus"></i> Tambah ke Keranjang
+                    </button>
+                `;
+                productList.appendChild(productCard);
+            });
+        }
+
+        // --- Fungsi Animasi & Tambah ke Keranjang ---
+        productList.addEventListener('click', (e) => {
+            if (e.target.classList.contains('add-to-cart-btn')) {
+                const button = e.target;
+                
+                if (!button.classList.contains('added')) {
+                    button.classList.add('added');
+                    button.innerHTML = ''; 
+
+                    setTimeout(() => {
+                        button.classList.remove('added');
+                        button.innerHTML = '<i class="fas fa-cart-plus"></i> Tambah ke Keranjang';
+                    }, 2000); 
+                }
+
+                const cartIcon = document.querySelector('.cart-icon-container');
+                cartIcon.classList.add('shake');
+
+                cartItemCount++;
+                cartTotalElement.textContent = cartItemCount;
+
+                setTimeout(() => {
+                    cartIcon.classList.remove('shake');
+                }, 500);
+            }
+        });
+
+        // --- Fungsi Salin Nomor Pembayaran ---
+        const copyButtons = document.querySelectorAll('.copy-btn');
+        copyButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetId = button.dataset.target;
+                const textToCopy = document.getElementById(targetId).innerText;
+
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    const originalText = button.innerHTML;
+                    button.innerHTML = 'Disalin!';
+                    button.classList.add('copied');
+
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.classList.remove('copied');
+                    }, 1500);
+                }).catch(err => {
+                    console.error('Gagal menyalin: ', err);
+                });
+            });
+        });
+
+        // --- Fitur Upload File ---
+        const fileInput = document.getElementById('proof-upload');
+        const fileNameDisplay = document.getElementById('file-name');
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                fileNameDisplay.textContent = fileInput.files[0].name;
+            } else {
+                fileNameDisplay.textContent = 'Belum ada file dipilih';
+            }
+        });
+
+        // --- Modal untuk QRIS ---
+        const modal = document.getElementById("qris-modal");
+        const img = document.getElementById("qris-image");
+        const modalImg = document.getElementById("img-modal");
+        const captionText = document.getElementById("caption");
+        
+        img.onclick = function(){
+          modal.style.display = "block";
+          modalImg.src = this.src;
+          captionText.innerHTML = this.alt;
+        }
+
+        const span = document.getElementsByClassName("close-modal")[0];
+        span.onclick = function() { 
+          modal.style.display = "none";
+        }
+        
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // --- Panggil fungsi untuk menampilkan produk saat halaman dimuat ---
+        displayProducts();
+
+    });
+    // === BAGIAN JAVASCRIPT BERAKHIR ===
+    </script>
+</body>
+</html>
